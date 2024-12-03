@@ -153,3 +153,4 @@ data/logs/
 
 # Commitizen config
 !.cz.toml
+data/eda/*.png
