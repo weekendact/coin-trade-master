@@ -1,6 +1,8 @@
+import os
 import pandas as pd
 from imblearn.over_sampling import SMOTE
 from src.models.lightgbm_model import train_lightgbm, evaluate_model
+import joblib
 
 # Load data
 print("Loading data...")
@@ -26,6 +28,16 @@ print("Balanced class distribution:\n", y_train_balanced.value_counts())
 # Train model
 print("Training LightGBM model...")
 model = train_lightgbm(X_train_balanced, y_train_balanced, X_val, y_val)
+
+# Ensure the models directory exists
+model_dir = "models"
+os.makedirs(model_dir, exist_ok=True)
+
+# Save model
+model_path = os.path.join(model_dir, "lightgbm_model.pkl")
+print(f"Saving model to {model_path}...")
+joblib.dump(model, model_path)
+print(f"Model saved successfully as '{model_path}'")
 
 # Evaluate model
 print("Evaluating model...")

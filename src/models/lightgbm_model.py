@@ -1,7 +1,22 @@
 import lightgbm as lgb
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, classification_report
+import joblib
+import numpy as np
 
-import lightgbm as lgb
+# 기존 train_lightgbm, evaluate_model 함수는 그대로 유지
+
+def load_model(model_path):
+    """Load a pre-trained LightGBM model."""
+    return joblib.load(model_path)
+
+def predict(model, data):
+    """Make predictions with the LightGBM model."""
+    # LightGBM의 predict 함수는 DataFrame이나 ndarray를 요구
+    predictions = model.predict(data)
+    predicted_classes = predictions.argmax(axis=1)  # 다중 클래스 분류
+    return predicted_classes
+
+
 
 def train_lightgbm(X_train, y_train, X_val, y_val):
     train_data = lgb.Dataset(X_train, label=y_train)
@@ -55,3 +70,4 @@ def evaluate_model(model, X_test, y_test):
     print(classification_report(y_test, predicted_classes, zero_division=0))
 
     return metrics
+
